@@ -149,6 +149,30 @@ public class BookServiceTest {
         Mockito.verify(bookLoanRepository, Mockito.times(1)).delete(getBookLoan());
     }
 
+    @Test
+    public void returnBookTestInvalidBookId() {
+        LoanBookDTO loanBookDTO = new LoanBookDTO();
+        loanBookDTO.setBookId(2);
+        loanBookDTO.setUserId(1);
+
+        Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(getUser()));
+        Mockito.when(bookRepository.findById(1)).thenReturn(Optional.of(getBook()));
+
+        Assert.assertThrows(NotFoundException.class, () -> bookService.returnBook(loanBookDTO));
+    }
+
+    @Test
+    public void returnBookTestInvalidUserId() {
+        LoanBookDTO loanBookDTO = new LoanBookDTO();
+        loanBookDTO.setBookId(1);
+        loanBookDTO.setUserId(2);
+
+        Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(getUser()));
+        Mockito.when(bookRepository.findById(1)).thenReturn(Optional.of(getBook()));
+
+        Assert.assertThrows(NotFoundException.class, () -> bookService.returnBook(loanBookDTO));
+    }
+
 
     private Book getBook() {
         Book book = new Book();
